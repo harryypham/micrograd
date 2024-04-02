@@ -1,4 +1,4 @@
-
+import math
 class Value:
     """ stores a single scalar value and its gradient """
 
@@ -50,7 +50,18 @@ class Value:
         out._backward = _backward
 
         return out
+    
+    def sigmoid(self):
+        res = 1 / (1 + math.exp(-self.data))
+        out = Value(res, (self, ), 'Sigmoid')
 
+        def _backward():
+            self.grad += res*(1-res)
+        
+        out._backward = _backward
+
+        return out 
+    
     def backward(self):
 
         # topological order all of the children in the graph
